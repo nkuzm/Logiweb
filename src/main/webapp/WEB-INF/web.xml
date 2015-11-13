@@ -4,4 +4,13 @@
 
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
+
+    <servlet>
+        <servlet-name>AddDriver</servlet-name>
+        <servlet-class>ru.tsystems.javaschool.kuzmenkov.logiweb.servlets.AddDriverServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AddDriver</servlet-name>
+        <url-pattern>/servlet/AddDriver</url-pattern>
+    </servlet-mapping>
 </web-app>

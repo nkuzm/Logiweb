@@ -9,7 +9,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
 /**
- * Created by Nikolay on 13.11.2015. Class для проверки соединения с БД и применения методов EntityManager.
+ * Created by Nikolay on 13.11.2015.
  */
 public class EntityManagerTestApp {
 
