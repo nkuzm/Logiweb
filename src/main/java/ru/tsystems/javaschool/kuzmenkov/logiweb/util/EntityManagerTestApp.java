@@ -19,7 +19,7 @@ public class EntityManagerTestApp {
         EntityTransaction tx = em.getTransaction();
 
         try {
-            Driver driver = new Driver("Иван", "Иванов", 123, 0, DriverStatus.REST);
+            Driver driver = new Driver("Андрей", "Иванов", 1234, DriverStatus.REST);
 
             tx.begin();
             em.persist(driver);

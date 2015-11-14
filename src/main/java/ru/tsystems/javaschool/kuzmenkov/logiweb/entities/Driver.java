@@ -3,42 +3,53 @@ package ru.tsystems.javaschool.kuzmenkov.logiweb.entities;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.entities.status.DriverStatus;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
- * Created by Nikolay on 13.11.2015. Class для сущности "Водитель" из итогового задания (1й вариант, без связей).
+ * Created by Nikolay on 13.11.2015.
  */
 @Entity
 @Table(name = "drivers")
 public class Driver {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "driver_id")
+    @GeneratedValue
+    @Column(name = "driver_id", unique = true)
     private Integer driverId;
 
+    @Column(name = "first_name")
     private String firstName;
 
+    @Column(name = "last_name")
     private String lastName;
 
+    @Column(name = "personal_number", unique = true)
     private Integer personalNumber;
 
-    private Integer hoursWorked;
-
+    @Column(name = "driver_status")
+    @Enumerated(EnumType.STRING)
     private DriverStatus driverStatus;
 
+    @OneToMany(mappedBy = "driverForThisShiftFK")
+    private List<DriverShift> driverShiftRecords;
+
+    @ManyToOne
+    @JoinColumn(name = "current_driver_location_FK")
+    private City currentCityFK;
+
+    @ManyToOne
+    @JoinColumn(name = "current_truck_FK")
+    private Truck currentTruckFK;
+
     public Driver() {
+
     }
 
-    public Driver(String firstName, String lastName, Integer personalNumber, Integer hoursWorked, DriverStatus driverStatus) {
+    public Driver(String firstName, String lastName, Integer personalNumber, DriverStatus driverStatus) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.personalNumber = personalNumber;
-        this.hoursWorked = hoursWorked;
         this.driverStatus = driverStatus;
-    }
-
-    public Integer getDriverId() {
-        return driverId;
     }
 
     public String getFirstName() {
@@ -65,19 +76,35 @@ public class Driver {
         this.personalNumber = personalNumber;
     }
 
-    public Integer getHoursWorked() {
-        return hoursWorked;
-    }
-
-    public void setHoursWorked(Integer hoursWorked) {
-        this.hoursWorked = hoursWorked;
-    }
-
     public DriverStatus getDriverStatus() {
         return driverStatus;
     }
 
     public void setDriverStatus(DriverStatus driverStatus) {
         this.driverStatus = driverStatus;
+    }
+
+    public List<DriverShift> getDriverShiftRecords() {
+        return driverShiftRecords;
+    }
+
+    public void setDriverShiftRecords(List<DriverShift> driverShiftRecords) {
+        this.driverShiftRecords = driverShiftRecords;
+    }
+
+    public City getCurrentCityFK() {
+        return currentCityFK;
+    }
+
+    public void setCurrentCityFK(City currentCityFK) {
+        this.currentCityFK = currentCityFK;
+    }
+
+    public Truck getCurrentTruckFK() {
+        return currentTruckFK;
+    }
+
+    public void setCurrentTruckFK(Truck currentTruckFK) {
+        this.currentTruckFK = currentTruckFK;
     }
 }
