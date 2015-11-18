@@ -1,33 +1,27 @@
 package ru.tsystems.javaschool.kuzmenkov.logiweb.service.Impl;
 
-import ru.tsystems.javaschool.kuzmenkov.logiweb.dao.AbstractDAO;
-import ru.tsystems.javaschool.kuzmenkov.logiweb.dao.impl.AbstractDAOImpl;
+import ru.tsystems.javaschool.kuzmenkov.logiweb.dao.DriverDAO;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.entities.Driver;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.service.DriverService;
 
-import java.sql.SQLException;
+import javax.persistence.EntityManager;
 
 /**
  * Created by Nikolay on 13.11.2015.
  */
 public class DriverServiceImpl implements DriverService {
 
-    private AbstractDAO abstractDAO = new AbstractDAOImpl();
+    private EntityManager entityManager;
 
-    @Override
-    public void addDriver(String firstName, String lastName, Integer personalNumber) throws SQLException {
-        Driver newDriver = createNewDriver(firstName, lastName, personalNumber);
+    private DriverDAO driverDAO;
 
-        abstractDAO.addDriver(newDriver, personalNumber);
-        abstractDAO.closeConnection();
+    public DriverServiceImpl(DriverDAO driverDAO, EntityManager entityManager) {
+        this.driverDAO = driverDAO;
+        this.entityManager = entityManager;
     }
 
-    private Driver createNewDriver(String firstName, String lastName, Integer personalNumber) {
-        Driver newDriver = new Driver();
-        newDriver.setFirstName(firstName);
-        newDriver.setLastName(lastName);
-        newDriver.setPersonalNumber(personalNumber);
+    @Override
+    public void addDriver(Driver newDriver) {
 
-        return newDriver;
     }
 }

@@ -12,21 +12,35 @@ import java.sql.SQLException;
 /**
  * Created by Nikolay on 13.11.2015.
  */
-public class AbstractDAOImpl implements AbstractDAO {
+public class AbstractDAOImpl<T> implements AbstractDAO<T> {
 
-    private DriverDAO driverDAO = new DriverDAOImpl();
+    private Class<T> entityClass;
+    private EntityManager entityManager;
 
-    private EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("logiwebPU");
-    private EntityManager entityManager = entityManagerFactory.createEntityManager();
-
-    @Override
-    public void addDriver(Driver newDriver, Integer personalNumber) throws SQLException {
-        driverDAO.addDriver(newDriver, personalNumber, entityManager);
+    public AbstractDAOImpl(Class<T> entityClass, EntityManager entityManager) {
+        this.entityClass = entityClass;
+        this.entityManager = entityManager;
     }
 
     @Override
-    public void closeConnection() {
-        entityManager.close();
-        entityManagerFactory.close();
+    public T create(T entity) {
+
+
+        return null;
+    }
+
+    @Override
+    public T findById(Integer id) {
+        return null;
+    }
+
+    @Override
+    public void update(T changeableEntity) {
+
+    }
+
+    @Override
+    public void delete(T removedEntity) {
+
     }
 }

@@ -7,15 +7,15 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.logging.Logger;
 
 /**
  * Created by Nikolay on 13.11.2015.
  */
-public class DriverDAOImpl implements DriverDAO {
+public class DriverDAOImpl extends AbstractDAOImpl<Driver> implements DriverDAO {
 
-    private Logger logger = Logger.getLogger(DriverDAOImpl.class.getName());
-
+    public DriverDAOImpl(Class<Driver> entityClass, EntityManager entityManager) {
+        super(entityClass, entityManager);
+    }
 
     @Override
     public void addDriver(Driver newDriver, Integer personalNumber, EntityManager entityManager) throws SQLException {
@@ -23,7 +23,7 @@ public class DriverDAOImpl implements DriverDAO {
 
         try {
             transaction.begin();
-            logger.info("Add new driver with personal number: " + personalNumber);
+            //logger.info("Add new driver with personal number: " + personalNumber);
 
             List<Integer> ids = checkUniquePersonalNumber(entityManager);
 

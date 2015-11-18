@@ -7,9 +7,13 @@ import java.sql.SQLException;
 /**
  * Created by Nikolay on 13.11.2015.
  */
-public interface AbstractDAO {
+public interface AbstractDAO<T> {
 
-    void addDriver(Driver newDriver, Integer personalNumber) throws SQLException;
+    T create(T newEntity);
 
-    void closeConnection();
+    T findById(Integer idOfEntity);
+
+    void update(T changeableEntity);
+
+    void delete(T removedEntity);
 }

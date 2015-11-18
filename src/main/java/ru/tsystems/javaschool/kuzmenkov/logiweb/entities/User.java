@@ -16,12 +16,42 @@ public class User {
     @Column(name = "user_id", unique = true)
     private Integer userId;
 
+    @Column(name = "email", unique = true)
+    private String userEmail;
+
+    @Column(name = "password")
+    private String userPassword;
+
     @Enumerated(EnumType.STRING)
-    @Column(name = "user_role")
+    @Column(name = "role")
     private Role userRole;
 
     public User() {
 
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
+
+    public String getUserPassword() {
+        return userPassword;
+    }
+
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
     }
 
     public Role getUserRole() {

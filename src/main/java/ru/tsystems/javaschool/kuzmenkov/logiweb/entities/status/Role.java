@@ -5,5 +5,5 @@ package ru.tsystems.javaschool.kuzmenkov.logiweb.entities.status;
  */
 public enum Role {
 
-    ADMINISTRATOR, DRIVER
+    MANAGER, DRIVER
 }

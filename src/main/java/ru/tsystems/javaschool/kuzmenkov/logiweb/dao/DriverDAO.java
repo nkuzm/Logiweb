@@ -8,7 +8,7 @@ import java.sql.SQLException;
 /**
  * Created by Nikolay on 13.11.2015.
  */
-public interface DriverDAO {
+public interface DriverDAO extends AbstractDAO<Driver> {
 
     void addDriver(Driver newDriver, Integer personalNumber, EntityManager entityManager) throws SQLException;
 }

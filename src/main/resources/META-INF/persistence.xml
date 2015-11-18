@@ -6,6 +6,11 @@
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
         <class>ru.tsystems.javaschool.kuzmenkov.logiweb.entities.Driver</class>
         <class>ru.tsystems.javaschool.kuzmenkov.logiweb.entities.Truck</class>
+        <class>ru.tsystems.javaschool.kuzmenkov.logiweb.entities.City</class>
+        <class>ru.tsystems.javaschool.kuzmenkov.logiweb.entities.DriverShift</class>
+        <class>ru.tsystems.javaschool.kuzmenkov.logiweb.entities.Freight</class>
+        <class>ru.tsystems.javaschool.kuzmenkov.logiweb.entities.Order</class>
+        <class>ru.tsystems.javaschool.kuzmenkov.logiweb.entities.User</class>
 
         <properties>
             <property name="dialect" value="org.hibernate.dialect.MySQLDialect"/>
