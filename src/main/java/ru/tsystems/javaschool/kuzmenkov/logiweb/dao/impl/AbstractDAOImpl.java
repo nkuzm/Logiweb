@@ -1,13 +1,9 @@
 package ru.tsystems.javaschool.kuzmenkov.logiweb.dao.impl;
 
 import ru.tsystems.javaschool.kuzmenkov.logiweb.dao.AbstractDAO;
-import ru.tsystems.javaschool.kuzmenkov.logiweb.dao.DriverDAO;
-import ru.tsystems.javaschool.kuzmenkov.logiweb.entities.Driver;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import java.sql.SQLException;
+import java.util.List;
 
 /**
  * Created by Nikolay on 13.11.2015.
@@ -22,11 +18,24 @@ public class AbstractDAOImpl<T> implements AbstractDAO<T> {
         this.entityManager = entityManager;
     }
 
+    protected final EntityManager getEntityManager() {
+        return entityManager;
+    }
+
+    protected final Class<T> getEntityClass() {
+        return entityClass;
+    }
+
     @Override
     public T create(T entity) {
+        try {
+            entityManager.persist(entity);
 
+        } catch (Exception e) {
+            System.out.println("Exception in AbstractDAOImpl.");
+        }
 
-        return null;
+        return entity;
     }
 
     @Override
@@ -42,5 +51,22 @@ public class AbstractDAOImpl<T> implements AbstractDAO<T> {
     @Override
     public void delete(T removedEntity) {
 
+    }
+
+    @Override
+    public List<T> findAll() {
+        List<T> queryResult = null;
+
+        try {
+            queryResult = getEntityManager().createQuery(
+                    "SELECT t FROM " + getEntityClass().getSimpleName() + " t")
+                    .getResultList();
+
+        } catch (Exception e) {
+            System.out.println("Exception in AbstractDAOImpl");;
+
+        }
+
+        return queryResult;
     }
 }

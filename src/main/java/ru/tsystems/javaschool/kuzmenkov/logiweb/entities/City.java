@@ -15,6 +15,9 @@ public class City {
     @Column(name = "city_id", unique = true)
     private Integer cityId;
 
+    @Column(name = "city_name", nullable = false)
+    private String name;
+
     @OneToMany(mappedBy = "currentCityFK")
     private List<Driver> driversInCity;
 
@@ -29,6 +32,14 @@ public class City {
 
     public City() {
 
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public List<Driver> getDriversInCity() {

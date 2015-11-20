@@ -3,9 +3,8 @@ package ru.tsystems.javaschool.kuzmenkov.logiweb.dao.impl;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.dao.DriverDAO;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.entities.Driver;
 
+import javax.persistence.Query;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -18,30 +17,25 @@ public class DriverDAOImpl extends AbstractDAOImpl<Driver> implements DriverDAO 
     }
 
     @Override
-    public void addDriver(Driver newDriver, Integer personalNumber, EntityManager entityManager) throws SQLException {
-        EntityTransaction transaction = entityManager.getTransaction();
+    public Driver findDriverByPersonalNumber(Integer driverPersonalNumber) {
+        Driver queryResult = null;
 
         try {
-            transaction.begin();
-            //logger.info("Add new driver with personal number: " + personalNumber);
+            EntityManager entityManager = getEntityManager();
 
-            List<Integer> ids = checkUniquePersonalNumber(entityManager);
+            Query query = entityManager.createQuery("SELECT dr FROM Driver dr " +
+                    "WHERE dr.personalNumber = :driverPersonalNumber", Driver.class);
+            query.setParameter("driverPersonalNumber", driverPersonalNumber);
+            List<Driver> resultList = query.getResultList();
 
-            if (ids.contains(personalNumber)) {
-                throw new IllegalArgumentException("Driver with this personal number is already exists.");
+            if (!resultList.isEmpty()) {
+                queryResult = resultList.get(0);
             }
 
-            entityManager.merge(newDriver);
-            transaction.commit();
-
-        } finally {
-            if (transaction.isActive()) {
-                transaction.rollback();
-            }
+        } catch (Exception e) {
+            System.out.println("Exception in DriverDAOImpl.");
         }
-    }
 
-    private List<Integer> checkUniquePersonalNumber(EntityManager entityManager) throws SQLException {
-        return entityManager.createQuery("SELECT d.personalNumber FROM Driver d").getResultList();
+        return queryResult;
     }
 }

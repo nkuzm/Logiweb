@@ -10,5 +10,5 @@ import java.sql.SQLException;
  */
 public interface DriverDAO extends AbstractDAO<Driver> {
 
-    void addDriver(Driver newDriver, Integer personalNumber, EntityManager entityManager) throws SQLException;
+    Driver findDriverByPersonalNumber(Integer driverPersonalNumber);
 }

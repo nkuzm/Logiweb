@@ -26,7 +26,7 @@ public final class LogiwebAppResources {
         return SingletonHolder.SINGLETON_INSTANCE;
     }
 
-    private EntityManagerFactory getEntityManagerFactory() {
+    public EntityManagerFactory getEntityManagerFactory() {
         if(entityManagerFactory == null) {
             synchronized(this) {
                 if(entityManagerFactory == null) {
