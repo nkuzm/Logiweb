@@ -1,7 +1,7 @@
-package ru.tsystems.javaschool.kuzmenkov.logiweb.service.Impl;
+package ru.tsystems.javaschool.kuzmenkov.logiweb.services.Impl;
 
 import ru.tsystems.javaschool.kuzmenkov.logiweb.dao.TruckDAO;
-import ru.tsystems.javaschool.kuzmenkov.logiweb.service.TruckService;
+import ru.tsystems.javaschool.kuzmenkov.logiweb.services.TruckService;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.entities.Truck;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.entities.status.TruckStatus;
 

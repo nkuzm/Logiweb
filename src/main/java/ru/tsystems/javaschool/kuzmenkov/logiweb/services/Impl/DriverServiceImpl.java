@@ -1,15 +1,14 @@
-package ru.tsystems.javaschool.kuzmenkov.logiweb.service.Impl;
+package ru.tsystems.javaschool.kuzmenkov.logiweb.services.Impl;
 
 import ru.tsystems.javaschool.kuzmenkov.logiweb.dao.DriverDAO;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.dao.TruckDAO;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.entities.Driver;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.entities.status.DriverStatus;
-import ru.tsystems.javaschool.kuzmenkov.logiweb.service.DriverService;
+import ru.tsystems.javaschool.kuzmenkov.logiweb.services.DriverService;
 
 import javax.persistence.EntityManager;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Nikolay on 13.11.2015.

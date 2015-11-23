@@ -1,4 +1,4 @@
-package ru.tsystems.javaschool.kuzmenkov.logiweb.service;
+package ru.tsystems.javaschool.kuzmenkov.logiweb.services;
 
 import ru.tsystems.javaschool.kuzmenkov.logiweb.entities.Truck;
 

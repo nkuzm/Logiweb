@@ -1,8 +1,10 @@
 package ru.tsystems.javaschool.kuzmenkov.logiweb.dao.impl;
 
 import ru.tsystems.javaschool.kuzmenkov.logiweb.dao.AbstractDAO;
+import ru.tsystems.javaschool.kuzmenkov.logiweb.exceptions.LogiwebDAOException;
 
 import javax.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,46 +29,46 @@ public class AbstractDAOImpl<T> implements AbstractDAO<T> {
     }
 
     @Override
-    public T create(T entity) {
+    public T create(T newEntity) throws LogiwebDAOException {
         try {
-            entityManager.persist(entity);
+            entityManager.persist(newEntity);
 
         } catch (Exception e) {
             System.out.println("Exception in AbstractDAOImpl.");
+            throw new LogiwebDAOException(e);
         }
 
-        return entity;
+        return newEntity;
     }
 
     @Override
-    public T findById(Integer id) {
+    public T findById(Integer id) throws LogiwebDAOException {
         return null;
     }
 
     @Override
-    public void update(T changeableEntity) {
+    public void update(T changeableEntity) throws LogiwebDAOException {
 
     }
 
     @Override
-    public void delete(T removedEntity) {
+    public void delete(T removedEntity) throws LogiwebDAOException {
 
     }
 
     @Override
-    public List<T> findAll() {
-        List<T> queryResult = null;
+    public List<T> findAll() throws LogiwebDAOException {
+        List<T> allEntitiesResult;
 
         try {
-            queryResult = getEntityManager().createQuery(
-                    "SELECT t FROM " + getEntityClass().getSimpleName() + " t")
-                    .getResultList();
+            allEntitiesResult = getEntityManager().createQuery("SELECT t FROM "
+                    + getEntityClass().getSimpleName() + " t").getResultList();
 
         } catch (Exception e) {
             System.out.println("Exception in AbstractDAOImpl");;
-
+            throw new LogiwebDAOException(e);
         }
 
-        return queryResult;
+        return new ArrayList<T>(allEntitiesResult);
     }
 }

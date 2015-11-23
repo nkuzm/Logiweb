@@ -1,8 +1,7 @@
 package ru.tsystems.javaschool.kuzmenkov.logiweb.dao;
 
-import ru.tsystems.javaschool.kuzmenkov.logiweb.entities.Driver;
+import ru.tsystems.javaschool.kuzmenkov.logiweb.exceptions.LogiwebDAOException;
 
-import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -10,13 +9,13 @@ import java.util.List;
  */
 public interface AbstractDAO<T> {
 
-    T create(T newEntity);
+    T create(T newEntity) throws LogiwebDAOException;
 
-    T findById(Integer idOfEntity);
+    T findById(Integer idOfEntity) throws LogiwebDAOException;
 
-    void update(T changeableEntity);
+    void update(T changeableEntity) throws LogiwebDAOException;
 
-    void delete(T removedEntity);
+    void delete(T removedEntity) throws LogiwebDAOException;
 
-    List<T> findAll();
+    List<T> findAll() throws LogiwebDAOException;
 }

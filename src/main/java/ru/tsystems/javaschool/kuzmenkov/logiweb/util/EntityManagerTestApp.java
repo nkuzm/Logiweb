@@ -1,15 +1,9 @@
 package ru.tsystems.javaschool.kuzmenkov.logiweb.util;
 
-import ru.tsystems.javaschool.kuzmenkov.logiweb.entities.City;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.entities.Driver;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.entities.status.DriverStatus;
-import ru.tsystems.javaschool.kuzmenkov.logiweb.service.DriverService;
-import ru.tsystems.javaschool.kuzmenkov.logiweb.service.Impl.DriverServiceImpl;
+import ru.tsystems.javaschool.kuzmenkov.logiweb.services.DriverService;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
 import java.sql.SQLException;
 
 /**
@@ -29,10 +23,6 @@ public class EntityManagerTestApp {
             driver.setDriverStatus(DriverStatus.REST);
             driver.setCurrentCityFK(null);
 
-
-            GetServices getServices = new GetServices();
-            DriverService driverService = getServices.getDriverService();
-            driverService.addDriver(driver);
         } finally {
             System.out.println("Закрываем connection.");
             LogiwebAppResources.getInstance().getEntityManager().close();
