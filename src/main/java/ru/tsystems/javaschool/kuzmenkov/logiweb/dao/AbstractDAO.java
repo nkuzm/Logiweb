@@ -11,7 +11,7 @@ public interface AbstractDAO<T> {
 
     T create(T newEntity) throws LogiwebDAOException;
 
-    T findById(Integer idOfEntity) throws LogiwebDAOException;
+    T findById(Integer entityId) throws LogiwebDAOException;
 
     void update(T changeableEntity) throws LogiwebDAOException;
 

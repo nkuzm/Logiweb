@@ -31,7 +31,7 @@ public class AbstractDAOImpl<T> implements AbstractDAO<T> {
     @Override
     public T create(T newEntity) throws LogiwebDAOException {
         try {
-            entityManager.persist(newEntity);
+            getEntityManager().persist(newEntity);
 
         } catch (Exception e) {
             System.out.println("Exception in AbstractDAOImpl.");
@@ -42,13 +42,29 @@ public class AbstractDAOImpl<T> implements AbstractDAO<T> {
     }
 
     @Override
-    public T findById(Integer id) throws LogiwebDAOException {
-        return null;
+    public T findById(Integer entityId) throws LogiwebDAOException {
+        try {
+            return getEntityManager().find(getEntityClass(), entityId);
+
+        } catch (Exception e) {
+            System.out.println("Exception in AbstractDAOImpl.");
+            throw new LogiwebDAOException(e);
+        }
     }
 
     @Override
     public void update(T changeableEntity) throws LogiwebDAOException {
+        if (changeableEntity == null) {
+            return;
+        }
 
+        try {
+            getEntityManager().merge(changeableEntity);
+
+        } catch (Exception e) {
+            System.out.println("Exception in AbstractDAOImpl.");
+            throw new LogiwebDAOException(e);
+        }
     }
 
     @Override

@@ -4,6 +4,7 @@ import ru.tsystems.javaschool.kuzmenkov.logiweb.entities.Freight;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.entities.Order;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.entities.Truck;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.exceptions.LogiwebServiceException;
+import ru.tsystems.javaschool.kuzmenkov.logiweb.exceptions.LogiwebValidationException;
 
 import java.util.List;
 
@@ -22,5 +23,5 @@ public interface OrderService {
 
     void addNewFreight(Freight newFreight) throws LogiwebServiceException;
 
-    void assignTruckToOrder(Truck assignedTruck, Integer orderId) throws LogiwebServiceException;
+    void assignTruckToOrder(Truck assignedTruck, Integer orderId) throws LogiwebServiceException, LogiwebValidationException;
 }

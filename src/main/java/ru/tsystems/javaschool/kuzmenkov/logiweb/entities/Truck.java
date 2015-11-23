@@ -21,10 +21,10 @@ public class Truck {
     private String truckNumber;
 
     @Column(name = "driver_count")
-    private Byte driverCount;
+    private Integer driverCount;
 
     @Column(name = "capacity")
-    private Float capacity;
+    private Double capacity;
 
     @Column(name = "truck_status")
     @Enumerated(EnumType.STRING)
@@ -44,6 +44,14 @@ public class Truck {
 
     }
 
+    public Integer getTruckId() {
+        return truckId;
+    }
+
+    public void setTruckId(Integer truckId) {
+        this.truckId = truckId;
+    }
+
     public String getTruckNumber() {
         return truckNumber;
     }
@@ -52,19 +60,19 @@ public class Truck {
         this.truckNumber = truckNumber;
     }
 
-    public Byte getDriverCount() {
+    public Integer getDriverCount() {
         return driverCount;
     }
 
-    public void setDriverCount(Byte driverCount) {
+    public void setDriverCount(Integer driverCount) {
         this.driverCount = driverCount;
     }
 
-    public Float getCapacity() {
+    public Double getCapacity() {
         return capacity;
     }
 
-    public void setCapacity(Float capacity) {
+    public void setCapacity(Double capacity) {
         this.capacity = capacity;
     }
 

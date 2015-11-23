@@ -123,7 +123,7 @@ public final class LogiwebAppResources {
 
     public OrderService getOrderService() {
         if(orderService == null) {
-            orderService = new OrderServiceImpl(getFreightDAO(), getOrderDAO(), getEntityManager());
+            orderService = new OrderServiceImpl(getFreightDAO(), getOrderDAO(), getTruckDAO(), getEntityManager());
         }
 
         return orderService;
