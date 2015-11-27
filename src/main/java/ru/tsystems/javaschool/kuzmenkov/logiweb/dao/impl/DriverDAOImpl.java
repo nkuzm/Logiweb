@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class DriverDAOImpl extends AbstractDAOImpl<Driver> implements DriverDAO {
 
-    private static final Logger LOGGER = Logger.getLogger(AbstractDAOImpl.class);
+    private static final Logger LOGGER = Logger.getLogger(DriverDAOImpl.class);
 
     public DriverDAOImpl(Class<Driver> entityClass, EntityManager entityManager) {
         super(entityClass, entityManager);

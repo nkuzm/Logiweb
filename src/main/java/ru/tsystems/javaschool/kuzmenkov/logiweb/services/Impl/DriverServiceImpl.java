@@ -3,13 +3,17 @@ package ru.tsystems.javaschool.kuzmenkov.logiweb.services.Impl;
 import org.apache.commons.lang3.StringUtils;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.dao.DriverDAO;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.dao.TruckDAO;
+import ru.tsystems.javaschool.kuzmenkov.logiweb.entities.City;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.entities.Driver;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.entities.status.DriverStatus;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.exceptions.LogiwebDAOException;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.exceptions.LogiwebServiceException;
+import ru.tsystems.javaschool.kuzmenkov.logiweb.exceptions.LogiwebValidationException;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.services.DriverService;
 
 import org.apache.log4j.Logger;
+import ru.tsystems.javaschool.kuzmenkov.logiweb.util.LogiwebValidator;
+
 import javax.persistence.EntityManager;
 import java.util.List;
 
@@ -31,8 +35,8 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @Override
-    public Driver addNewDriver(Driver newDriver) throws LogiwebServiceException {
-        validateFormValues(newDriver);
+    public Driver addNewDriver(Driver newDriver) throws LogiwebServiceException, LogiwebValidationException {
+        LogiwebValidator.validateDriverFormValues(newDriver);
 
         try {
             newDriver.setDriverStatus(DriverStatus.REST);
@@ -41,7 +45,7 @@ public class DriverServiceImpl implements DriverService {
             Driver driverWithSamePersonalNumber = driverDAO.findDriverByPersonalNumber(newDriver.getPersonalNumber());
 
             if (driverWithSamePersonalNumber != null) {
-                throw new LogiwebServiceException("Driver with this personal number #" + newDriver.getPersonalNumber()
+                throw new LogiwebValidationException("Driver with this personal number #" + newDriver.getPersonalNumber()
                         + " is already exist.");
             }
 
@@ -49,7 +53,7 @@ public class DriverServiceImpl implements DriverService {
             entityManager.getTransaction().commit();
 
             LOGGER.info("Driver created: " + newDriver.getFirstName() + " " + newDriver.getLastName()
-                    + " personal number #" + newDriver.getPersonalNumber());
+                    + " personal number #" + newDriver.getPersonalNumber() + " , ID: " + newDriver.getDriverId());
 
         } catch (LogiwebDAOException e) {
             LOGGER.warn("Exception in DriverServiceImpl - addNewDriver().", e);
@@ -111,6 +115,7 @@ public class DriverServiceImpl implements DriverService {
         return driverResult;
     }
 
+
     @Override
     public void deleteDriver(Driver deletedDriver) throws LogiwebServiceException {
         try {
@@ -139,21 +144,6 @@ public class DriverServiceImpl implements DriverService {
             if (entityManager.getTransaction().isActive()) {
                 entityManager.getTransaction().rollback();
             }
-        }
-    }
-
-    private void validateFormValues(Driver driver) throws LogiwebServiceException {
-        if(driver.getPersonalNumber() <= 0) {
-            throw new LogiwebServiceException("Driver personal number can not be 0 or negative.");
-        }
-        else if (StringUtils.isBlank(driver.getFirstName())) {
-            throw new LogiwebServiceException("Driver first name can not be empty.");
-        }
-        else if (StringUtils.isBlank(driver.getLastName())) {
-            throw new LogiwebServiceException("Driver last name can not be empty.");
-        }
-        else if (driver.getCurrentCityFK() == null || driver.getCurrentCityFK().getCityId() == 0) {
-            throw new LogiwebServiceException("Driver current city is not set.");
         }
     }
 }

@@ -1,23 +1,29 @@
 package ru.tsystems.javaschool.kuzmenkov.logiweb.dao.impl;
 
+import org.apache.log4j.Logger;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.dao.TruckDAO;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.entities.Truck;
+import ru.tsystems.javaschool.kuzmenkov.logiweb.exceptions.LogiwebDAOException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.List;
 
 /**
- * Created by Nikolay on 20.11.2015.
+ * Operations for Truck entity (implementation).
+ *
+ * @author Nikolay Kuzmenkov.
  */
 public class TruckDAOImpl extends AbstractDAOImpl<Truck> implements TruckDAO {
+
+    private static final Logger LOGGGER = Logger.getLogger(TruckDAOImpl.class);
 
     public TruckDAOImpl(Class<Truck> entityClass, EntityManager entityManager) {
         super(entityClass, entityManager);
     }
 
     @Override
-    public Truck findTruckByTruckNumber(String truckNumber) {
+    public Truck findTruckByTruckNumber(String truckNumber) throws LogiwebDAOException {
         Truck queryResult = null;
 
         try {
@@ -32,7 +38,8 @@ public class TruckDAOImpl extends AbstractDAOImpl<Truck> implements TruckDAO {
             }
 
         } catch (Exception e) {
-            System.out.println("Exception in TruckDAOImpl.");;
+            LOGGGER.warn("Exception in TruckDAOImpl - findTruckByTruckNumber().", e);
+            throw new LogiwebDAOException(e);
         }
 
         return queryResult;

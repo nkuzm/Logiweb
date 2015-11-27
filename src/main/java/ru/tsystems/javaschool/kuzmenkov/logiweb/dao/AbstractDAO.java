@@ -5,10 +5,20 @@ import ru.tsystems.javaschool.kuzmenkov.logiweb.exceptions.LogiwebDAOException;
 import java.util.List;
 
 /**
- * Created by Nikolay on 13.11.2015.
+ * DAO interface for basic CRUD operations.
+ *
+ * @author Nikolay Kuzmenkov.
+ * @param <T> persistent object.
  */
 public interface AbstractDAO<T> {
 
+    /**
+     * Persist new object into database.
+     *
+     * @param newEntity
+     * @return same persistent object.
+     * @throws LogiwebDAOException if failed to persist object.
+     */
     T create(T newEntity) throws LogiwebDAOException;
 
     T findById(Integer entityId) throws LogiwebDAOException;

@@ -9,7 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Nikolay on 13.11.2015.
+ * Abstract class with set of basic CRUD operations.
+ *
+ * @author Nikolay Kuzmenkov.
  */
 public class AbstractDAOImpl<T> implements AbstractDAO<T> {
 
