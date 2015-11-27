@@ -33,6 +33,13 @@ public class AbstractDAOImpl<T> implements AbstractDAO<T> {
         return entityClass;
     }
 
+    /**
+     * Persist new object into database.
+     *
+     * @param newEntity
+     * @return same persistent object.
+     * @throws LogiwebDAOException if failed to persist object.
+     */
     @Override
     public T create(T newEntity) throws LogiwebDAOException {
         try {
@@ -87,6 +94,12 @@ public class AbstractDAOImpl<T> implements AbstractDAO<T> {
         }
     }
 
+    /**
+     * Find all objects of that persistent class.
+     *
+     * @return list of objects or empty list.
+     * @throws LogiwebDAOException if failed to find all entities.
+     */
     @Override
     public List<T> findAll() throws LogiwebDAOException {
         List<T> allEntitiesResult;

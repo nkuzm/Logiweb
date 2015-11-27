@@ -11,6 +11,7 @@ import ru.tsystems.javaschool.kuzmenkov.logiweb.entities.status.TruckStatus;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.util.LogiwebValidator;
 
 import javax.persistence.EntityManager;
+import java.util.List;
 
 /**
  * Business logic related to trucks (implementation).
@@ -72,5 +73,32 @@ public class TruckServiceImpl implements TruckService {
         }
 
         return newTruck;
+    }
+
+    /**
+     * Find all trucks.
+     *
+     * @return list of trucks or empty list if nothing found.
+     * @throws LogiwebServiceException if unexpected exception occurred on lower level (not user fault).
+     */
+    @Override
+    public List<Truck> findAllTrucks() throws LogiwebServiceException {
+        List<Truck> allTrucksResult;
+
+        try {
+            entityManager.getTransaction().begin();
+            allTrucksResult = truckDAO.findAll();
+            entityManager.getTransaction().commit();
+
+        } catch (LogiwebDAOException e) {
+            LOGGGER.warn("Exception in TruckServiceImpl - findAllTrucks().", e);
+            throw new LogiwebServiceException(e);
+        } finally {
+            if (entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().rollback();
+            }
+        }
+
+        return allTrucksResult;
     }
 }

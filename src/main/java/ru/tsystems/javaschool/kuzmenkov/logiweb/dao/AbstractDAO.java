@@ -27,5 +27,11 @@ public interface AbstractDAO<T> {
 
     void delete(T deletedEntity) throws LogiwebDAOException;
 
+    /**
+     * Find all objects of that persistent class.
+     *
+     * @return list of objects or empty list.
+     * @throws LogiwebDAOException if failed to find all entities.
+     */
     List<T> findAll() throws LogiwebDAOException;
 }
