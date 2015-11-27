@@ -1,8 +1,8 @@
 package ru.tsystems.javaschool.kuzmenkov.logiweb.services;
 
 import ru.tsystems.javaschool.kuzmenkov.logiweb.entities.Driver;
+import ru.tsystems.javaschool.kuzmenkov.logiweb.exceptions.LogiwebServiceException;
 
-import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -10,7 +10,13 @@ import java.util.List;
  */
 public interface DriverService {
 
-    void addDriver(Driver newDriver) throws SQLException;
+    void editDriver(Driver editedDriver) throws LogiwebServiceException;
 
-    List<Driver> findAllDrivers();
+    List<Driver> findAllDrivers() throws LogiwebServiceException;
+
+    Driver findDriverById(Integer driverId) throws LogiwebServiceException;
+
+    Driver addNewDriver(Driver newDriver) throws LogiwebServiceException;
+
+    void deleteDriver(Driver deletedDriver) throws LogiwebServiceException;
 }

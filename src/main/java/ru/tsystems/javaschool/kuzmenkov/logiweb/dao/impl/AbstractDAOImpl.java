@@ -1,5 +1,6 @@
 package ru.tsystems.javaschool.kuzmenkov.logiweb.dao.impl;
 
+import org.apache.log4j.Logger;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.dao.AbstractDAO;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.exceptions.LogiwebDAOException;
 
@@ -11,6 +12,8 @@ import java.util.List;
  * Created by Nikolay on 13.11.2015.
  */
 public class AbstractDAOImpl<T> implements AbstractDAO<T> {
+
+    private static final Logger LOGGER = Logger.getLogger(AbstractDAOImpl.class);
 
     private Class<T> entityClass;
     private EntityManager entityManager;
@@ -34,7 +37,7 @@ public class AbstractDAOImpl<T> implements AbstractDAO<T> {
             getEntityManager().persist(newEntity);
 
         } catch (Exception e) {
-            System.out.println("Exception in AbstractDAOImpl.");
+            LOGGER.warn("Exception in AbstractDAOImpl - create().", e);
             throw new LogiwebDAOException(e);
         }
 
@@ -43,13 +46,17 @@ public class AbstractDAOImpl<T> implements AbstractDAO<T> {
 
     @Override
     public T findById(Integer entityId) throws LogiwebDAOException {
+        T entityResult;
+
         try {
-            return getEntityManager().find(getEntityClass(), entityId);
+            entityResult = getEntityManager().find(getEntityClass(), entityId);
 
         } catch (Exception e) {
-            System.out.println("Exception in AbstractDAOImpl.");
+            LOGGER.warn("Exception in AbstractDAOImpl - findById().", e);
             throw new LogiwebDAOException(e);
         }
+
+        return entityResult;
     }
 
     @Override
@@ -68,8 +75,14 @@ public class AbstractDAOImpl<T> implements AbstractDAO<T> {
     }
 
     @Override
-    public void delete(T removedEntity) throws LogiwebDAOException {
+    public void delete(T deletedEntity) throws LogiwebDAOException {
+        try {
+            getEntityManager().remove(deletedEntity);
 
+        } catch (Exception e) {
+            LOGGER.warn("Exception in AbstractDAOImpl - delete().", e);
+            throw new LogiwebDAOException(e);
+        }
     }
 
     @Override
@@ -81,7 +94,7 @@ public class AbstractDAOImpl<T> implements AbstractDAO<T> {
                     + getEntityClass().getSimpleName() + " t").getResultList();
 
         } catch (Exception e) {
-            System.out.println("Exception in AbstractDAOImpl");;
+            LOGGER.warn("Exception in AbstractDAOImpl - findAll().", e);
             throw new LogiwebDAOException(e);
         }
 

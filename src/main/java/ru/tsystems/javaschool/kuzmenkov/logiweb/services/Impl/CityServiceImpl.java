@@ -1,45 +1,46 @@
 package ru.tsystems.javaschool.kuzmenkov.logiweb.services.Impl;
 
-import ru.tsystems.javaschool.kuzmenkov.logiweb.dao.UserDAO;
-import ru.tsystems.javaschool.kuzmenkov.logiweb.entities.User;
+import ru.tsystems.javaschool.kuzmenkov.logiweb.dao.CityDAO;
+import ru.tsystems.javaschool.kuzmenkov.logiweb.entities.City;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.exceptions.LogiwebDAOException;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.exceptions.LogiwebServiceException;
-import ru.tsystems.javaschool.kuzmenkov.logiweb.services.UserService;
+import ru.tsystems.javaschool.kuzmenkov.logiweb.services.CityService;
 
 import javax.persistence.EntityManager;
+import java.util.List;
 
 /**
- * Created by Nikolay on 22.11.2015.
+ * Created by Nikolay on 26.11.2015.
  */
-public class UserServiceImpl implements UserService {
+public class CityServiceImpl implements CityService {
 
     private EntityManager entityManager;
-    private UserDAO userDAO;
 
-    public UserServiceImpl(EntityManager entityManager, UserDAO userDAO) {
+    private CityDAO cityDAO;
+
+    public CityServiceImpl(EntityManager entityManager, CityDAO cityDAO) {
         this.entityManager = entityManager;
-        this.userDAO = userDAO;
+        this.cityDAO = cityDAO;
     }
 
     @Override
-    public User getUserByEmailAndPassword(String email, String password) throws LogiwebServiceException {
-        User user;
+    public List<City> findAllCities() throws LogiwebServiceException {
+        List<City> allCitiesResult;
 
         try {
             entityManager.getTransaction().begin();
-            user = userDAO.getUserByEmailAndPassword(email, password);
+            allCitiesResult = cityDAO.findAll();
             entityManager.getTransaction().commit();
 
         } catch (LogiwebDAOException e) {
-            System.out.println("Exception in UserServiceImpl");
+            //LOG.warn("Something unexcpected happend.");
             throw new LogiwebServiceException(e);
-
         } finally {
             if (entityManager.getTransaction().isActive()) {
                 entityManager.getTransaction().rollback();
             }
         }
 
-        return user;
+        return allCitiesResult;
     }
 }

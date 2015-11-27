@@ -15,7 +15,7 @@ public interface AbstractDAO<T> {
 
     void update(T changeableEntity) throws LogiwebDAOException;
 
-    void delete(T removedEntity) throws LogiwebDAOException;
+    void delete(T deletedEntity) throws LogiwebDAOException;
 
     List<T> findAll() throws LogiwebDAOException;
 }

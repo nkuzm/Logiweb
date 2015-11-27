@@ -34,6 +34,14 @@ public class City {
 
     }
 
+    public Integer getCityId() {
+        return cityId;
+    }
+
+    public void setCityId(Integer cityId) {
+        this.cityId = cityId;
+    }
+
     public String getName() {
         return name;
     }

@@ -1,6 +1,7 @@
 package ru.tsystems.javaschool.kuzmenkov.logiweb.dao;
 
 import ru.tsystems.javaschool.kuzmenkov.logiweb.entities.Driver;
+import ru.tsystems.javaschool.kuzmenkov.logiweb.exceptions.LogiwebDAOException;
 
 import javax.persistence.EntityManager;
 import java.sql.SQLException;
@@ -10,5 +11,5 @@ import java.sql.SQLException;
  */
 public interface DriverDAO extends AbstractDAO<Driver> {
 
-    Driver findDriverByPersonalNumber(Integer driverPersonalNumber);
+    Driver findDriverByPersonalNumber(Integer driverPersonalNumber) throws LogiwebDAOException;
 }

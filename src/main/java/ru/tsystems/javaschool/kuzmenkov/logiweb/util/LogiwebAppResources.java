@@ -1,16 +1,11 @@
 package ru.tsystems.javaschool.kuzmenkov.logiweb.util;
 
+import ru.tsystems.javaschool.kuzmenkov.logiweb.dao.impl.CityDAOImpl;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.dao.*;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.dao.impl.*;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.entities.*;
-import ru.tsystems.javaschool.kuzmenkov.logiweb.services.DriverService;
-import ru.tsystems.javaschool.kuzmenkov.logiweb.services.Impl.DriverServiceImpl;
-import ru.tsystems.javaschool.kuzmenkov.logiweb.services.Impl.OrderServiceImpl;
-import ru.tsystems.javaschool.kuzmenkov.logiweb.services.Impl.TruckServiceImpl;
-import ru.tsystems.javaschool.kuzmenkov.logiweb.services.Impl.UserServiceImpl;
-import ru.tsystems.javaschool.kuzmenkov.logiweb.services.OrderService;
-import ru.tsystems.javaschool.kuzmenkov.logiweb.services.TruckService;
-import ru.tsystems.javaschool.kuzmenkov.logiweb.services.UserService;
+import ru.tsystems.javaschool.kuzmenkov.logiweb.services.*;
+import ru.tsystems.javaschool.kuzmenkov.logiweb.services.Impl.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -35,11 +30,13 @@ public final class LogiwebAppResources {
     private UserDAO userDAO;
     private OrderDAO orderDAO;
     private FreightDAO freightDAO;
+    private CityDAO cityDAO;
 
     private DriverService driverService;
     private TruckService truckService;
     private UserService userService;
     private OrderService orderService;
+    private CityService cityService;
 
     private LogiwebAppResources() {
 
@@ -129,6 +126,22 @@ public final class LogiwebAppResources {
         return orderService;
     }
 
+    public CityDAO getCityDAO() {
+        if(cityDAO == null) {
+            cityDAO = new CityDAOImpl(City.class, getEntityManager());
+        }
+
+        return cityDAO;
+    }
+
+    public CityService getCityService() {
+        if(cityService == null) {
+            cityService = new CityServiceImpl(getEntityManager(), getCityDAO());
+        }
+
+        return cityService;
+    }
+
     public UserDAO getUserDAO() {
         if(userDAO == null) {
             userDAO = new UserDAOImpl(User.class, getEntityManager());
@@ -146,4 +159,6 @@ public final class LogiwebAppResources {
 
         return userService;
     }
+
+
 }

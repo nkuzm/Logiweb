@@ -1,7 +1,10 @@
 package ru.tsystems.javaschool.kuzmenkov.logiweb.dao.impl;
 
+import org.apache.log4j.Logger;
+import ru.tsystems.javaschool.kuzmenkov.logiweb.dao.AbstractDAO;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.dao.DriverDAO;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.entities.Driver;
+import ru.tsystems.javaschool.kuzmenkov.logiweb.exceptions.LogiwebDAOException;
 
 import javax.persistence.Query;
 import javax.persistence.EntityManager;
@@ -12,12 +15,14 @@ import java.util.List;
  */
 public class DriverDAOImpl extends AbstractDAOImpl<Driver> implements DriverDAO {
 
+    private static final Logger LOGGER = Logger.getLogger(AbstractDAOImpl.class);
+
     public DriverDAOImpl(Class<Driver> entityClass, EntityManager entityManager) {
         super(entityClass, entityManager);
     }
 
     @Override
-    public Driver findDriverByPersonalNumber(Integer driverPersonalNumber) {
+    public Driver findDriverByPersonalNumber(Integer driverPersonalNumber) throws LogiwebDAOException{
         Driver queryResult = null;
 
         try {
@@ -33,7 +38,8 @@ public class DriverDAOImpl extends AbstractDAOImpl<Driver> implements DriverDAO 
             }
 
         } catch (Exception e) {
-            System.out.println("Exception in DriverDAOImpl.");
+            LOGGER.warn("Exception in DriverDAOImpl - findDriverByPersonalNumber().", e);
+            throw new LogiwebDAOException(e);
         }
 
         return queryResult;

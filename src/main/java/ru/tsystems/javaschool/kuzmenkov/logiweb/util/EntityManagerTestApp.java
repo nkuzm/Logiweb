@@ -25,26 +25,23 @@ public class EntityManagerTestApp {
         try {
             EntityManager em = LogiwebAppResources.getInstance().getEntityManager();
 
-            OrderService orderService = LogiwebAppResources.getInstance().getOrderService();
+            DriverService driverService = LogiwebAppResources.getInstance().getDriverService();
 
-            Truck truck = new Truck();
-            Order order = new Order();
-            City city = em.find(City.class, 1);
+            Driver driver = new Driver();
 
-            order.setOrderStatus(OrderStatus.CREATED);
+            driver.setPersonalNumber(1212);
+            driver.setFirstName("Paul");
+            driver.setLastName("Pogba");
 
-            truck.setTruckId(14);
-            truck.setTruckNumber("aaa111");
-            truck.setDriverCount(2);
-            truck.setCapacity((double) 2000);
-            truck.setTruckStatus(TruckStatus.WORKING);
-            truck.setCurrentCityFK(city);
+            City city = em.find(City.class, 2);
+            driver.setCurrentCityFK(city);
 
             /*em.getTransaction().begin();
-            em.persist(order);
+            em.persist();
             em.getTransaction().commit();*/
 
-            orderService.assignTruckToOrder(truck, 15);
+            driverService.addNewDriver(driver);
+            System.out.println("Success");
 
         } finally {
             System.out.println("Закрываем connection.");

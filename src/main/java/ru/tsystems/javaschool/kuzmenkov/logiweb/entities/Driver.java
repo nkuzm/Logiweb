@@ -45,11 +45,12 @@ public class Driver {
 
     }
 
-    public Driver(String firstName, String lastName, Integer personalNumber, DriverStatus driverStatus) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.personalNumber = personalNumber;
-        this.driverStatus = driverStatus;
+    public Integer getDriverId() {
+        return driverId;
+    }
+
+    public void setDriverId(Integer driverId) {
+        this.driverId = driverId;
     }
 
     public String getFirstName() {
