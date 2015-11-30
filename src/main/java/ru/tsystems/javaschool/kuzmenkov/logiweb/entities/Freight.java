@@ -20,7 +20,7 @@ public class Freight {
     private String description;
 
     @Column(name = "weight")
-    private Float weight;
+    private Double weight;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "freight_status")
@@ -42,6 +42,14 @@ public class Freight {
 
     }
 
+    public Integer getFreightId() {
+        return freightId;
+    }
+
+    public void setFreightId(Integer freightId) {
+        this.freightId = freightId;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -50,11 +58,11 @@ public class Freight {
         this.description = description;
     }
 
-    public Float getWeight() {
+    public Double getWeight() {
         return weight;
     }
 
-    public void setWeight(Float weight) {
+    public void setWeight(Double weight) {
         this.weight = weight;
     }
 

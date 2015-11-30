@@ -3,6 +3,7 @@ package ru.tsystems.javaschool.kuzmenkov.logiweb.dao.impl;
 import org.apache.log4j.Logger;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.dao.TruckDAO;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.entities.Truck;
+import ru.tsystems.javaschool.kuzmenkov.logiweb.entities.status.TruckStatus;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.exceptions.LogiwebDAOException;
 
 import javax.persistence.EntityManager;
@@ -20,6 +21,28 @@ public class TruckDAOImpl extends AbstractDAOImpl<Truck> implements TruckDAO {
 
     public TruckDAOImpl(Class<Truck> entityClass, EntityManager entityManager) {
         super(entityClass, entityManager);
+    }
+
+    @Override
+    public List<Truck> findByMinCapacityWhereStatusOkAndNotAssignedToOrder(Double minCargoCapacity) throws LogiwebDAOException {
+        List<Truck> queryResult;
+
+        try {
+            EntityManager entityManager = getEntityManager();
+
+            Query query = entityManager.createQuery("SELECT tr FROM Truck tr WHERE tr.truckStatus = :status AND " +
+                    "tr.orderForThisTruck IS NULL AND tr.capacity >= :capacity", Truck.class);
+            query.setParameter("status", TruckStatus.WORKING);
+            query.setParameter("capacity", minCargoCapacity);
+
+            queryResult = query.getResultList();
+
+        } catch (Exception e) {
+            LOGGGER.warn("Exception in TruckDAOImpl - findByMinCapacityWhereStatusOkAndNotAssignedToOrder()", e);
+            throw new LogiwebDAOException(e);
+        }
+
+        return queryResult;
     }
 
     @Override

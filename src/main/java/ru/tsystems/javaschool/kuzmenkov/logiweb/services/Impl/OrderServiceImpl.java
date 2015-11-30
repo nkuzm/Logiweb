@@ -1,7 +1,12 @@
 package ru.tsystems.javaschool.kuzmenkov.logiweb.services.Impl;
 
+import org.apache.log4j.Logger;
+import ru.tsystems.javaschool.kuzmenkov.logiweb.dao.CityDAO;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.dao.FreightDAO;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.dao.TruckDAO;
+import ru.tsystems.javaschool.kuzmenkov.logiweb.entities.City;
+import ru.tsystems.javaschool.kuzmenkov.logiweb.entities.status.FreightStatus;
+import ru.tsystems.javaschool.kuzmenkov.logiweb.entities.status.OrderStatus;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.entities.status.TruckStatus;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.exceptions.LogiwebDAOException;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.dao.OrderDAO;
@@ -11,6 +16,7 @@ import ru.tsystems.javaschool.kuzmenkov.logiweb.entities.Truck;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.exceptions.LogiwebServiceException;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.exceptions.LogiwebValidationException;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.services.OrderService;
+import ru.tsystems.javaschool.kuzmenkov.logiweb.util.LogiwebValidator;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -20,13 +26,18 @@ import java.util.List;
  */
 public class OrderServiceImpl implements OrderService {
 
+    private static final Logger LOGGER = Logger.getLogger(OrderServiceImpl.class);
+
     private EntityManager entityManager;
 
+    private CityDAO cityDAO;
     private FreightDAO freightDAO;
     private OrderDAO orderDAO;
     private TruckDAO truckDAO;
 
-    public OrderServiceImpl(FreightDAO freightDAO, OrderDAO orderDAO, TruckDAO truckDAO, EntityManager entityManager) {
+
+    public OrderServiceImpl(CityDAO cityDAO, FreightDAO freightDAO, OrderDAO orderDAO, TruckDAO truckDAO, EntityManager entityManager) {
+        this.cityDAO = cityDAO;
         this.freightDAO = freightDAO;
         this.orderDAO = orderDAO;
         this.truckDAO = truckDAO;
@@ -96,12 +107,60 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order findOrderById(Integer orderId) throws LogiwebServiceException {
-        return null;
+        Order orderResult;
+
+        try {
+            entityManager.getTransaction().begin();
+            orderResult = orderDAO.findById(orderId);
+            entityManager.getTransaction().commit();
+
+        } catch (LogiwebDAOException e) {
+            LOGGER.warn("Exception in OrderServiceImpl - findOrderById().", e);
+            throw new LogiwebServiceException(e);
+        } finally {
+            if (entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().rollback();
+            }
+        }
+
+        return orderResult;
     }
 
     @Override
-    public void addNewFreight(Freight newFreight) throws LogiwebServiceException {
+    public void addNewFreight(Freight newFreight) throws LogiwebServiceException,LogiwebValidationException {
+        LogiwebValidator.validateFreightFormValues(newFreight);
 
+        try {
+            entityManager.getTransaction().begin();
+
+            //get managed entities
+            City cityFrom = cityDAO.findById(newFreight.getCityToFK().getCityId());
+            City cityTo = cityDAO.findById(newFreight.getCityToFK().getCityId());
+
+            Order orderForFreight = orderDAO.findById(newFreight.getOrderForThisFreightFK().getOrderId());
+
+            //switch detached entities in cargo to managed ones
+            newFreight.setCityFromFK(cityFrom);
+            newFreight.setCityToFK(cityTo);
+            newFreight.setOrderForThisFreightFK(orderForFreight);
+
+            //validateCargoManagedFieldsByBusinessRequirements(newCargo);
+
+            newFreight.setFreightStatus(FreightStatus.PREPARED);
+
+            freightDAO.create(newFreight);
+            LOGGER.info("New cargo with id #" + newFreight.getFreightId() + "created for irder id #" + orderForFreight.getOrderId());
+            entityManager.refresh(newFreight.getOrderForThisFreightFK());
+            entityManager.getTransaction().commit();
+
+        } catch (LogiwebDAOException e) {
+            LOGGER.warn("Something unexpected happend.", e);
+            throw new LogiwebServiceException(e);
+        } finally {
+            if (entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().rollback();
+            }
+        }
     }
 
     @Override
@@ -152,6 +211,44 @@ public class OrderServiceImpl implements OrderService {
             throw new LogiwebServiceException(e);
         } finally {
             if(entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().rollback();
+            }
+        }
+    }
+
+    @Override
+    public void setReadyStatusForOrder(Order order) throws LogiwebValidationException, LogiwebServiceException {
+        if(order == null) {
+            throw new LogiwebValidationException("Order does not exist.");
+        }
+        if (order.getOrderLines() == null || order.getOrderLines().isEmpty()) {
+            throw new LogiwebValidationException("Order must contain at least 1 cargo.");
+        }
+        else if (order.getAssignedTruckFK() == null) {
+            throw new LogiwebValidationException("Order must have assigned truck.");
+        }
+        else if (order.getAssignedTruckFK().getDriversInTruck() == null || order.getAssignedTruckFK().getDriversInTruck().size()
+                < order.getAssignedTruckFK().getDriverCount()) {
+            throw new LogiwebValidationException("Truck must have full count of drivers. Assign drivers.");
+        }
+        else if (order.getOrderStatus() != OrderStatus.CREATED) {
+            throw new LogiwebValidationException("Order must be in 'CREATED' state.");
+        }
+
+        try {
+            entityManager.getTransaction().begin();
+            order.setOrderStatus(OrderStatus.READY_TO_GO);
+            orderDAO.update(order);
+
+            LOGGER.info("Order id#" + order.getOrderId() + " changed status to " + OrderStatus.READY_TO_GO);
+
+            entityManager.getTransaction().commit();
+
+        } catch (LogiwebDAOException e) {
+            LOGGER.warn("Exception in OrderServiceImpl - setReadyStatusForOrder().", e);
+            throw new LogiwebServiceException(e);
+        } finally {
+            if (entityManager.getTransaction().isActive()) {
                 entityManager.getTransaction().rollback();
             }
         }

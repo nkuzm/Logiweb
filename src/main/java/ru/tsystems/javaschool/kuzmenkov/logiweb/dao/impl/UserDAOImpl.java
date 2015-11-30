@@ -29,7 +29,7 @@ public class UserDAOImpl extends AbstractDAOImpl<User> implements UserDAO {
             queryResult = query.getResultList();
 
             if(queryResult.isEmpty()) {
-                throw new Exception();
+                throw new LogiwebDAOException();
             }
 
         } catch (Exception e) {

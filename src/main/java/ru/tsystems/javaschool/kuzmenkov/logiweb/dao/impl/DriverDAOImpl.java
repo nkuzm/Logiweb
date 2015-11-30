@@ -3,6 +3,7 @@ package ru.tsystems.javaschool.kuzmenkov.logiweb.dao.impl;
 import org.apache.log4j.Logger;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.dao.AbstractDAO;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.dao.DriverDAO;
+import ru.tsystems.javaschool.kuzmenkov.logiweb.entities.City;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.entities.Driver;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.exceptions.LogiwebDAOException;
 
@@ -39,6 +40,27 @@ public class DriverDAOImpl extends AbstractDAOImpl<Driver> implements DriverDAO 
 
         } catch (Exception e) {
             LOGGER.warn("Exception in DriverDAOImpl - findDriverByPersonalNumber().", e);
+            throw new LogiwebDAOException(e);
+        }
+
+        return queryResult;
+    }
+
+    @Override
+    public List<Driver> findByCityWhereNotAssignedToTruck(City city) throws LogiwebDAOException {
+        List<Driver> queryResult;
+
+        try {
+            EntityManager em = getEntityManager();
+
+            Query query = em.createQuery("SELECT dr FROM Driver dr WHERE dr.currentTruckFK IS NULL"
+                    + " AND dr.currentCityFK = :city", Driver.class);
+            query.setParameter("city", city);
+
+            queryResult = query.getResultList();
+
+        } catch (Exception e) {
+            LOGGER.warn(e);
             throw new LogiwebDAOException(e);
         }
 

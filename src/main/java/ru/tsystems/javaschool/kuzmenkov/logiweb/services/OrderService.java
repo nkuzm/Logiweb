@@ -21,7 +21,9 @@ public interface OrderService {
 
     Order findOrderById(Integer orderId) throws LogiwebServiceException;
 
-    void addNewFreight(Freight newFreight) throws LogiwebServiceException;
+    void addNewFreight(Freight newFreight) throws LogiwebServiceException, LogiwebValidationException;
 
     void assignTruckToOrder(Truck assignedTruck, Integer orderId) throws LogiwebServiceException, LogiwebValidationException;
+
+    void setReadyStatusForOrder(Order order) throws LogiwebServiceException, LogiwebValidationException;
 }

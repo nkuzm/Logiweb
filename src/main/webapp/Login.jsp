@@ -1,44 +1,36 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>Login page</title>
-  <link rel="stylesheet" type="text/css" href="style.css"/>
-</head>
-<body>
-<div id="wrapper">
-  <header>
-    <div class="content-wrap">
-    </div>
-  </header>
-  <section id="content" class="clearfix">
-    <section id="page-content">
-      <div class="content-wrap">
-        <h1>Please sign in</h1>
-        <form name="formName" action="servlet/AddDriver" method="post">
-          <div class="form-element">
-            <input type="email" placeholder="Email" required="" id="email"
-                   name="email"/>
-          </div>
-          <div class="form-element">
-            <input type="password" placeholder="Password" required="" id="password" name="password"/>
-          </div>
-          <div class="form-element">
-            <input type="submit" name="sign in" id="sign in" value="Sign in"/>
-          </div>
-        </form>
-      </div>
-    </section>
-    <aside>
-      <div class="content-wrap">
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-      </div>
-    </aside>
-  </section>
-  <div id="empty-div"></div>
+<jsp:include page="Header.jsp">
+    <jsp:param name="title" value="Login page" />
+    <jsp:param value="/login.css" name="css"/>
+</jsp:include>
+
+<div class="container">
+
+    <form class="form-signin" method="POST" action="login">
+        <h2 class="form-signin-heading">Please sign in</h2>
+
+        <label for="inputEmail" class="sr-only">Email address</label>
+        <input type="email" name="email" value="${email}" id="inputEmail" class="form-control"
+               placeholder="Email address" required autofocus>
+
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" name="password" id="inputPassword" class="form-control"
+            placeholder="Password" required>
+
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+
+        <c:if test="${not empty error}">
+            <div class="alert alert-warning">
+                <strong>Warning!</strong> ${error}
+            </div>
+        </c:if>
+
+    </form>
+
 </div>
-<div id="overlay"></div>
-<div class="modal-dialog"></div>
-<footer></footer>
+
+<jsp:include page="/Footer.jsp"/>
+
 </body>
 </html>

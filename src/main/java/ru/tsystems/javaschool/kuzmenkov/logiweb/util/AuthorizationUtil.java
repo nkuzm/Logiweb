@@ -13,13 +13,18 @@ public class AuthorizationUtil {
     public static final String SESSION_USER_ROLE_ATTR = "userRole";
 
     private AuthorizationUtil() {
+
     }
 
-    public static boolean userIsLoggedIn(HttpServletRequest request) {
-        return request.getSession().getAttribute(SESSION_USER_ROLE_ATTR) != null;
+    public static boolean checkIsLoggedIn(HttpServletRequest req) {
+        return req.getSession().getAttribute(SESSION_USER_ROLE_ATTR) != null;
     }
 
-    public static void startAuthSessionForUserRole(HttpSession session, Role userRole) {
+    public static void startAuthSessionForUser(HttpSession session, Role userRole) {
         session.setAttribute(SESSION_USER_ROLE_ATTR, userRole);
+    }
+
+    public static void destroyAuthSessionForUser(HttpSession session) {
+        session.setAttribute(SESSION_USER_ROLE_ATTR, null);
     }
 }

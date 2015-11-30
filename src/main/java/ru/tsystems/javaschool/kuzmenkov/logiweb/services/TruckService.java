@@ -30,4 +30,21 @@ public interface TruckService {
      * @throws LogiwebServiceException if unexpected exception occurred on lower level (not user fault).
      */
     List<Truck> findAllTrucks() throws LogiwebServiceException;
+
+    List<Truck> findFreeAndUnbrokenByCargoCapacity(Double minCargoWeightCapacity) throws LogiwebServiceException;
+
+    /**
+     * Find truck by truck ID.
+     *
+     * @param truckId
+     * @return truck by this truck ID or null.
+     * @throws LogiwebServiceException if unexpected exception occurred on lower level (not user fault).
+     */
+    Truck findTruckById(Integer truckId) throws LogiwebServiceException;
+
+    void removeAssignedOrderAndDriversFromTruck(Truck truck) throws LogiwebServiceException, LogiwebValidationException;
+
+    void removeTruck(Truck truckToRemove) throws LogiwebServiceException, LogiwebValidationException;
+
+
 }

@@ -25,19 +25,6 @@ public final class LogiwebAppResources {
     volatile private EntityManagerFactory entityManagerFactory;
     volatile private EntityManager entityManager;
 
-    private DriverDAO driverDAO;
-    private TruckDAO truckDAO;
-    private UserDAO userDAO;
-    private OrderDAO orderDAO;
-    private FreightDAO freightDAO;
-    private CityDAO cityDAO;
-
-    private DriverService driverService;
-    private TruckService truckService;
-    private UserService userService;
-    private OrderService orderService;
-    private CityService cityService;
-
     private LogiwebAppResources() {
 
     }
@@ -71,94 +58,50 @@ public final class LogiwebAppResources {
     }
 
     private DriverDAO getDriverDAO() {
-        if(driverDAO == null) {
-            driverDAO = new DriverDAOImpl(Driver.class, getEntityManager());
-        }
+        return new DriverDAOImpl(Driver.class, getEntityManager());
+    }
 
-        return driverDAO;
+    private DriverShiftDAO getDriverShiftDAO() {
+        return new DriverShiftDAOImpl(DriverShift.class, getEntityManager());
     }
 
     public DriverService getDriverService() {
-        if(driverService == null) {
-            driverService = new DriverServiceImpl(getDriverDAO(), getTruckDAO(), getEntityManager());
-        }
-
-        return driverService;
+        return new DriverServiceImpl(getDriverDAO(), getDriverShiftDAO(), getTruckDAO(), getEntityManager());
     }
 
     private TruckDAO getTruckDAO() {
-        if(truckDAO == null) {
-            truckDAO = new TruckDAOImpl(Truck.class, getEntityManager());
-        }
-
-        return truckDAO;
+        return new TruckDAOImpl(Truck.class, getEntityManager());
     }
 
     public TruckService getTruckService() {
-        if(truckService == null) {
-            truckService = new TruckServiceImpl(getTruckDAO(), getEntityManager());
-        }
-
-        return truckService;
+        return new TruckServiceImpl(getDriverDAO(),getTruckDAO(), getEntityManager());
     }
 
-    public FreightDAO getFreightDAO() {
-        if(freightDAO == null) {
-            freightDAO = new FreightDAOImpl(Freight.class, getEntityManager());
-        }
-
-        return freightDAO;
+    private FreightDAO getFreightDAO() {
+        return new FreightDAOImpl(Freight.class, getEntityManager());
     }
 
-    public OrderDAO getOrderDAO() {
-        if(orderDAO == null) {
-            orderDAO = new OrderDAOImpl(Order.class, getEntityManager());
-        }
-
-        return orderDAO;
+    private OrderDAO getOrderDAO() {
+        return new OrderDAOImpl(Order.class, getEntityManager());
     }
 
     public OrderService getOrderService() {
-        if(orderService == null) {
-            orderService = new OrderServiceImpl(getFreightDAO(), getOrderDAO(), getTruckDAO(), getEntityManager());
-        }
-
-        return orderService;
+        return new OrderServiceImpl(getCityDAO(), getFreightDAO(), getOrderDAO(), getTruckDAO(), getEntityManager());
     }
 
-    public CityDAO getCityDAO() {
-        if(cityDAO == null) {
-            cityDAO = new CityDAOImpl(City.class, getEntityManager());
-        }
-
-        return cityDAO;
+    private CityDAO getCityDAO() {
+        return new CityDAOImpl(City.class, getEntityManager());
     }
 
     public CityService getCityService() {
-        if(cityService == null) {
-            cityService = new CityServiceImpl(getEntityManager(), getCityDAO());
-        }
-
-        return cityService;
+        return new CityServiceImpl(getEntityManager(), getCityDAO());
     }
 
-    public UserDAO getUserDAO() {
-        if(userDAO == null) {
-            userDAO = new UserDAOImpl(User.class, getEntityManager());
-        }
-
-        return userDAO;
+    private UserDAO getUserDAO() {
+        return new UserDAOImpl(User.class, getEntityManager());
     }
 
     public UserService getUserService() {
-        if(userService == null) {
-            userService = new UserServiceImpl(getEntityManager(),
-                            getUserDAO());
-
-        }
-
-        return userService;
+        return new UserServiceImpl(getEntityManager(), getUserDAO());
     }
-
-
 }

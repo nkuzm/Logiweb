@@ -6,6 +6,7 @@ import ru.tsystems.javaschool.kuzmenkov.logiweb.exceptions.LogiwebServiceExcepti
 import ru.tsystems.javaschool.kuzmenkov.logiweb.exceptions.LogiwebValidationException;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Nikolay on 13.11.2015.
@@ -30,5 +31,5 @@ public interface DriverService {
 
     void deleteDriver(Driver deletedDriver) throws LogiwebServiceException;
 
-    //List<Driver> findUnassignedDriversByWorkingHoursAndCity(City city, Double maxWorkingHours) throws LogiwebServiceException;
+    Set<Driver> findUnassignedDriversByWorkingHoursAndCity(City city, Double maxWorkingHours) throws LogiwebServiceException;
 }

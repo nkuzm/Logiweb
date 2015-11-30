@@ -5,5 +5,5 @@ package ru.tsystems.javaschool.kuzmenkov.logiweb.entities.status;
  */
 public enum OrderStatus {
 
-    CREATED, MADE
+    CREATED, READY_TO_GO, OrderStatus, DONE
 }

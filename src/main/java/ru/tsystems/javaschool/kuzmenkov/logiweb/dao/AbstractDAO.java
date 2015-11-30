@@ -21,6 +21,13 @@ public interface AbstractDAO<T> {
      */
     T create(T newEntity) throws LogiwebDAOException;
 
+    /**
+     * Find persistent object by entity ID (primary key).
+     *
+     * @param entityId
+     * @return persistent object or null if not found.
+     * @throws LogiwebDAOException if failed to find entity by ID.
+     */
     T findById(Integer entityId) throws LogiwebDAOException;
 
     void update(T changeableEntity) throws LogiwebDAOException;

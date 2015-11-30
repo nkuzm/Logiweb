@@ -1,5 +1,6 @@
 package ru.tsystems.javaschool.kuzmenkov.logiweb.servlets.filters;
 
+import org.apache.log4j.Logger;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.util.AuthorizationUtil;
 
 import javax.servlet.*;
@@ -12,6 +13,8 @@ import java.io.IOException;
  */
 public class LoginFilter implements Filter {
 
+    private static final Logger LOGGER = Logger.getLogger(LoginFilter.class);
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 
@@ -20,20 +23,20 @@ public class LoginFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
             throws IOException, ServletException {
-        HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
-        HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
+        HttpServletRequest httpServletReq = (HttpServletRequest) servletRequest;
+        HttpServletResponse httpServletResp = (HttpServletResponse) servletResponse;
 
-        boolean loggedIn = AuthorizationUtil.userIsLoggedIn((HttpServletRequest) servletRequest);
+        boolean loggedIn = AuthorizationUtil.checkIsLoggedIn(httpServletReq);
 
         if (loggedIn) {
             filterChain.doFilter(servletRequest, servletResponse);
         }
         else {
             try {
-                httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/private/Login.jsp");
-            } catch (IOException e) {
-                //LOG.warn("IO exception", e);
-                e.printStackTrace();
+                httpServletResp.sendRedirect(httpServletReq.getContextPath() + "/Login.jsp");
+            } catch (Exception e) {
+                LOGGER.warn("Exception in LoginFilter", e);
+                httpServletResp.sendRedirect(httpServletReq.getContextPath() + "/Login.jsp");
             }
         }
     }

@@ -1,11 +1,14 @@
 package ru.tsystems.javaschool.kuzmenkov.logiweb.servlets;
 
+import org.apache.log4j.Logger;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.entities.User;
+import ru.tsystems.javaschool.kuzmenkov.logiweb.entities.status.Role;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.exceptions.LogiwebServiceException;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.services.UserService;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.util.AuthorizationUtil;
 import ru.tsystems.javaschool.kuzmenkov.logiweb.util.LogiwebAppResources;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,18 +20,12 @@ import java.io.IOException;
  */
 public class AuthServlet extends HttpServlet {
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setContentType("text/html");
-
-        if(AuthorizationUtil.userIsLoggedIn(req)) {
-            redirectToActionPage(req, resp);
-        }
-        else resp.sendRedirect("Login.jsp");
-    }
+    private static final Logger LOGGGER = Logger.getLogger(AuthServlet.class);
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("text/html");
+
         String email = req.getParameter("email");
         String password = req.getParameter("password");
 
@@ -37,20 +34,25 @@ public class AuthServlet extends HttpServlet {
         try {
             if (email != null) {
                 User user = userService.getUserByEmailAndPassword(email, password);
-                AuthorizationUtil.startAuthSessionForUserRole(req.getSession(), user.getUserRole());
-                System.out.println("User id:" + user.getUserId() + " mail:" + user.getUserEmail() + " is logged in.");
-                //redirectToFrontPage(request, response);
+                AuthorizationUtil.startAuthSessionForUser(req.getSession(), user.getUserRole());
+                LOGGGER.info("User id:" + user.getUserId() + " mail:" + user.getUserEmail() + " is logged in.");
+                redirectToActionPage(req, resp);
             }
         } catch (LogiwebServiceException e) {
-            req.setAttribute("error", "User is not found");
+            req.setAttribute("error", "User with this pass and mail is not found.");
+            RequestDispatcher rq = req.getRequestDispatcher("Login.jsp");
+            rq.forward(req, resp);
         }
     }
 
-    private void redirectToActionPage(HttpServletRequest req, HttpServletResponse resp) {
-        try {
-            resp.sendRedirect("addDriverr.jsp");
-        } catch (IOException e) {
-            e.printStackTrace();
+    private void redirectToActionPage(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        Role userRole= (Role) req.getSession().getAttribute(AuthorizationUtil.SESSION_USER_ROLE_ATTR);
+
+        if (userRole == Role.MANAGER) {
+            //resp.sendRedirect("private/manager/ManagerMainPage.jsp");
+        }
+        else if (userRole == Role.DRIVER) {
+            resp.sendRedirect("private/manager/HelloDriver.jsp");
         }
     }
 }
